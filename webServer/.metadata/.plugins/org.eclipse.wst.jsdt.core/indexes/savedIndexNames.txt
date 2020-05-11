@@ -1,0 +1,2 @@
+INDEX VERSION 1.4+/Users/johyunmin/Documents/AndroidProjects/2020/CoronaAlertApp/webServer/.metadata/.plugins/org.eclipse.wst.jsdt.core/indexes
+655032825.index
