@@ -1,3 +1,5 @@
 INDEX VERSION 1.131
 /Users/johyunmin/Documents/AndroidProjects/2020/CoronaAlertApp/webServer/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/2412764813.index
 /coronaAlert/src
+/Users/johyunmin/Documents/work/AndroidProjects/2020/CoronaAlertApp/webServer/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/2412764813.index
+/coronaAlert/src
