@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 import static com.example.coronaalertapp.NearbyActivity.maplist;
 
-public class ConvertJSONtoVO {
+public class JsonConverter {
 
     public static ArrayList<CoronaLocationVO> convertToCoronaLocation(String s) {
         Log.d("===", s.trim());

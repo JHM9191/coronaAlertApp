@@ -2,18 +2,28 @@ package com.example.coronaalertapp;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.example.coronaalertapp.util.Constant;
-import com.example.coronaalertapp.util.JsonConverter;
 import com.example.coronaalertapp.util.HttpHandler;
-import com.example.coronaalertapp.vo.Item;
+import com.example.coronaalertapp.util.JsonConverter;
 import com.example.coronaalertapp.vo.CoronaLocationVO;
+import com.example.coronaalertapp.vo.Item;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,15 +31,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
-import android.util.Log;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 
-public class NearbyActivity extends AppCompatActivity {
+public class SearchMapActivity extends AppCompatActivity {
 
     String TAG = "===";
     SupportMapFragment sMapFragment;
@@ -38,11 +44,11 @@ public class NearbyActivity extends AppCompatActivity {
     boolean flag = true;
     public static ArrayList<CoronaLocationVO> maplist;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nearby);
+        setContentView(R.layout.activity_search_map);
+
         String[] permissions = {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -50,14 +56,47 @@ public class NearbyActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,
                 permissions, 101);
 
+        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
+                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+
+        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+            }
+
+            @Override
+            public void onError(Status status) {
+            }
+        });
+
+
+//        // Initialize the AutocompleteSupportFragment.
+//        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+//                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
+//
+//        // Specify the types of place data to return.
+//        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+//
+//        // Set up a PlaceSelectionListener to handle the response.
+//        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+//            @Override
+//            public void onPlaceSelected(Place place) {
+//                // TODO: Get info about the selected place.
+//                Log.d(TAG, "Place: " + place.getName() + ", " + place.getId());
+//            }
+//
+//            @Override
+//            public void onError(Status status) {
+//                // TODO: Handle the error.
+//                Log.d(TAG, "An error occurred: " + status);
+//            }
+//        });
 
         String url = "http://" + Constant.serverIP + "/coronaAlert/corona.jsp";
         ItemAsync itemAsync = new ItemAsync(url);
         itemAsync.execute();
 
-
     }
-
 
     class ItemAsync extends AsyncTask<Void, Void, String> {
         String url;
@@ -92,7 +131,7 @@ public class NearbyActivity extends AppCompatActivity {
     }
 
     public void displayMap(final ArrayList<CoronaLocationVO> locList) {
-        sMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        sMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map_search);
         sMapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -121,7 +160,10 @@ public class NearbyActivity extends AppCompatActivity {
                 );
             }
         });
+
+
     }
+
 
     class MyLocation implements LocationListener {
 
@@ -132,7 +174,7 @@ public class NearbyActivity extends AppCompatActivity {
             LatLng latLng = new LatLng(lat, lon);
 //            gmap.addMarker(new MarkerOptions()
 //                    .position(latLng));
-            while(flag) {
+            while (flag) {
                 gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11));
                 flag = false;
             }
@@ -155,4 +197,9 @@ public class NearbyActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+    }
 }

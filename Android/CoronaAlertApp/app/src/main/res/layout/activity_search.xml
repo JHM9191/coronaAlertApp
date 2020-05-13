@@ -6,14 +6,49 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
     android:gravity="center"
-    tools:context=".SearchActivity">
+    android:orientation="vertical"
+    tools:context=".SearchActivity"
+    android:id="@+id/search_layout">
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/et_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
         android:ems="10"
         android:hint="확진자의 경로를 검색하세요"
         android:inputType="textPersonName"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp" />
+
+    <!--    <com.google.android.material.chip.Chip-->
+    <!--        android:id="@+id/chip"-->
+    <!--        style="@style/Widget.MaterialComponents.Chip.Choice"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:text="강남역" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <me.gujun.android.taggroup.TagGroup
+            android:id="@+id/tag_group"
+            style="@style/TagGroup"
+            android:layout_width="wrap_content"
+            app:atg_backgroundColor="#D6C9EB"
+            app:atg_borderColor="@color/colorPrimaryDark"
+            app:atg_checkedBackgroundColor="@color/colorPrimaryDark"
+            app:atg_checkedBorderColor="@color/colorPrimaryDark"
+            app:atg_textColor="@color/colorPrimaryDark"
+            app:atg_textSize="16sp" />
+    </LinearLayout>
+
 </LinearLayout>

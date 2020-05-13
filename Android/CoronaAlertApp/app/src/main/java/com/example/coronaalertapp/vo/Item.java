@@ -1,4 +1,4 @@
-package com.example.coronaalertapp.util;
+package com.example.coronaalertapp.vo;
 
 import com.example.coronaalertapp.vo.CoronaLocationVO;
 
