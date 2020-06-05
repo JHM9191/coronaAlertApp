@@ -11,6 +11,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -21,15 +22,17 @@ import com.example.coronaalertapp.util.JsonConverter;
 import com.example.coronaalertapp.vo.CoronaLocationVO;
 import com.example.coronaalertapp.vo.Item;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -49,6 +52,16 @@ public class SearchMapActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_map);
 
+        // Initialize the SDK
+        String apiKey = "AIzaSyDd_6K6yusi-8YrFEcBTJgzMbd-XR-wnIM";
+
+        if (!Places.isInitialized()) {
+            Places.initialize(getApplicationContext(), apiKey);
+        }
+
+        // Create a new Places client instance
+        PlacesClient placesClient = Places.createClient(this);
+
         String[] permissions = {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -56,39 +69,48 @@ public class SearchMapActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this,
                 permissions, 101);
 
-        PlaceAutocompleteFragment autocompleteFragment = (PlaceAutocompleteFragment)
-                getFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
 
+        // Initialize the AutocompleteSupportFragment.
+        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
+                getSupportFragmentManager().findFragmentById(R.id.place_autocomplete_fragment);
+        Log.d(TAG, "initialized AutocompleteSupportFragment");
+        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME, Place.Field.LAT_LNG));
+////
+////        autocompleteFragment.getView().setBackgroundColor(Color.WHITE);
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
-            public void onPlaceSelected(Place place) {
+            public void onPlaceSelected(@NonNull Place place) {
+
+                Log.d(TAG, "Place name : " + place.getName());
+                Log.d(TAG, "Place latlng : " + place.getLatLng());
+                gmap.addMarker(new MarkerOptions().position(place.getLatLng()).title(place.getName().toString()));
+                gmap.animateCamera(CameraUpdateFactory.newLatLngZoom(place.getLatLng(), 14));
+
             }
 
+
             @Override
-            public void onError(Status status) {
+            public void onError(@NonNull Status status) {
+
             }
         });
 
-
-//        // Initialize the AutocompleteSupportFragment.
-//        AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-//                getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 //
-//        // Specify the types of place data to return.
+//// Specify the types of place data to return.
 //        autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
 //
-//        // Set up a PlaceSelectionListener to handle the response.
+//// Set up a PlaceSelectionListener to handle the response.
 //        autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 //            @Override
 //            public void onPlaceSelected(Place place) {
 //                // TODO: Get info about the selected place.
-//                Log.d(TAG, "Place: " + place.getName() + ", " + place.getId());
+//                Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
 //            }
 //
 //            @Override
 //            public void onError(Status status) {
 //                // TODO: Handle the error.
-//                Log.d(TAG, "An error occurred: " + status);
+//                Log.i(TAG, "An error occurred: " + status);
 //            }
 //        });
 
@@ -115,14 +137,14 @@ public class SearchMapActivity extends AppCompatActivity {
         protected String doInBackground(Void... voids) {
             String result = null;
             result = HttpHandler.getString(url);
-            Log.d(TAG, "result : " + result);
+//            Log.d(TAG, "result : " + result);
             return result;
         }
 
         @Override
         protected void onPostExecute(String s) {
             maplist = JsonConverter.convertToCoronaLocation(s);
-            Log.d(TAG, "maplist : " + maplist);
+//            Log.d(TAG, "maplist : " + maplist);
 
             final ArrayList<CoronaLocationVO> locList = maplist;
 
@@ -200,6 +222,7 @@ public class SearchMapActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
 
     }
 }
