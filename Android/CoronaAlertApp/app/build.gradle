@@ -46,4 +46,10 @@ dependencies {
     implementation 'com.android.support:design:29.0.0'
     implementation 'me.gujun.android.taggroup:library:1.4@aar'
     implementation 'com.google.android.material:material:1.2.0-alpha06'
+
+    // charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // gradient color for horizontal bar graph
+    implementation 'com.github.oatrice:MPAndroidChart:v3.1.0'
 }

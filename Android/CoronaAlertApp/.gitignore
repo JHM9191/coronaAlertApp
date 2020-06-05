@@ -12,3 +12,7 @@
 /captures
 .externalNativeBuild
 .cxx
+/Android/CoronaAlertApp/app/src/main/res/values/apis.xml
+
+.gitignore
+/aws
