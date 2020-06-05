@@ -2,8 +2,11 @@ package com.example.coronaalertapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 
 import com.example.coronaalertapp.util.ApiExplorer;
@@ -11,6 +14,20 @@ import com.example.coronaalertapp.util.ApiExplorer;
 import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity {
+
+    CoronaLocationNearAlertService myService;
+    ServiceConnection sconn = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            CoronaLocationNearAlertService.MyBinder mb = (CoronaLocationNearAlertService.MyBinder) service;
+            myService = mb.getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

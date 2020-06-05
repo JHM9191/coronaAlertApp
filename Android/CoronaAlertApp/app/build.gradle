@@ -50,6 +50,8 @@ dependencies {
     // charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
-    // gradient color for horizontal bar graph
-    implementation 'com.github.oatrice:MPAndroidChart:v3.1.0'
+
+    // FCM
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation 'com.google.firebase:firebase-core:17.2.0'
 }
