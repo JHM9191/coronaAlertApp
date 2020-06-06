@@ -42,11 +42,14 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(new ApiExplorer(getString(R.string.corona_kr_api_key))).start();
 
+
+        Point device = new Point();
+        getWindowManager().getDefaultDisplay().getSize(device);
+        Log.d(TAG, "device.x : " + device.x);
         // gif corona
         ImageView iv_gif_corona = findViewById(R.id.iv_gif_corona);
         Glide.with(this).load(R.raw.corona).into(iv_gif_corona);
-        Point device = new Point();
-        getWindowManager().getDefaultDisplay().getSize(device);
+
         new Thread(new GifAnimationThread(iv_gif_corona, device.x + 450f)).start();
 
         // gif running man
@@ -77,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     Log.d(TAG, "Entered while()");
                     ObjectAnimator animation = ObjectAnimator.ofFloat(iv_gif, "translationX", x);
-                    animation.setDuration(4000);
+                    animation.setDuration(12000);
                     animation.start();
                     animation.setRepeatCount(-1);
                 }
