@@ -2,18 +2,23 @@ package com.example.coronaalertapp;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.animation.ObjectAnimator;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.coronaalertapp.util.ApiExplorer;
 
-import java.io.IOException;
-
 public class MainActivity extends AppCompatActivity {
+
+    String TAG = "===";
 
     CoronaLocationNearAlertService myService;
     ServiceConnection sconn = new ServiceConnection() {
@@ -37,7 +42,49 @@ public class MainActivity extends AppCompatActivity {
 
         new Thread(new ApiExplorer(getString(R.string.corona_kr_api_key))).start();
 
+        // gif corona
+        ImageView iv_gif_corona = findViewById(R.id.iv_gif_corona);
+        Glide.with(this).load(R.raw.corona).into(iv_gif_corona);
+        Point device = new Point();
+        getWindowManager().getDefaultDisplay().getSize(device);
+        new Thread(new GifAnimationThread(iv_gif_corona, device.x + 450f)).start();
 
+        // gif running man
+        ImageView iv_gif_runningman = findViewById(R.id.iv_gif_runningman);
+        Glide.with(this).load(R.raw.runningman2).into(iv_gif_runningman);
+        new Thread(new GifAnimationThread(iv_gif_runningman, device.x + 400f)).start();
+    }
+
+    class GifAnimationThread implements Runnable {
+        ImageView iv_gif;
+        float x;
+
+        public GifAnimationThread() {
+
+        }
+
+        public GifAnimationThread(ImageView iv_gif, float x) {
+            this.iv_gif = iv_gif;
+            this.x = x;
+        }
+
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                boolean flag = true;
+
+                @Override
+                public void run() {
+                    Log.d(TAG, "Entered while()");
+                    ObjectAnimator animation = ObjectAnimator.ofFloat(iv_gif, "translationX", x);
+                    animation.setDuration(4000);
+                    animation.start();
+                    animation.setRepeatCount(-1);
+                }
+            });
+
+
+        }
     }
 
 

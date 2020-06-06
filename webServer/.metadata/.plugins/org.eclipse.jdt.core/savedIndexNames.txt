@@ -17,7 +17,6 @@ INDEX VERSION 1.131+/Users/johyunmin/Documents/work/AndroidProjects/2020/CoronaA
 2453854336.index
 939283709.index
 134529407.index
-4198679121.index
 3380219271.index
 4070652566.index
 584012193.index
